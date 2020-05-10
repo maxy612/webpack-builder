@@ -2,3 +2,5 @@
 /logs
 /test/smoke/template/dist
 /coverage
+
+*.log
