@@ -1,16 +1,16 @@
 const path = require("path");
 const webpack = require("webpack");
 const rimraf = require("rimraf");
-const Mocha = require('mocha');
+const Mocha = require("mocha");
 
 const mocha = new Mocha({
-  timeout: '10000ms'
-})
+  timeout: "10000ms",
+});
 
 process.chdir(path.join(__dirname, "./template"));
 
 rimraf("./dist", () => {
-  const { WebpackProd } = require("../../index")();
+  const { WebpackProd } = require("../../index")({ type: 'vue' });
 
   webpack(WebpackProd, (err, stats) => {
     if (err) {

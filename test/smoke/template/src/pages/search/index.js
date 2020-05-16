@@ -13,7 +13,6 @@ class Search extends React.Component {
         <img
           src={logo}
           className={styles.searchImg}
-          onClick={this.loadText.bind(this)}
         />
         <img src={img} className={styles.searchImg2} />
         <br />

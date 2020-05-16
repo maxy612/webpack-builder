@@ -29,6 +29,10 @@
     "px2rem-loader": "^0.1.9",
     "style-loader": "^1.2.1",
     "url-loader": "^4.1.0",
+    "vue": "^2.6.11",
+    "vue-loader": "^15.9.2",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.11",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-merge": "^4.2.2"
@@ -36,7 +40,7 @@
   "scripts": {
     "eslint": "eslint --fix ./lib",
     "test": "istanbul cover ./node_modules/.bin/_mocha",
-    "smoke": "node test/smoke/index.js"
+    "smoke": "node test/smoke/index.js && node test/smoke/index-dev.js && node test/vue-smoke/index.js && node test/vue-smoke/index-dev.js"
   },
   "devDependencies": {
     "assert": "^2.0.0",

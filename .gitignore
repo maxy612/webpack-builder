@@ -1,6 +1,7 @@
 /node_modules
 /logs
 /test/smoke/template/dist
+/test/vue-smoke/template/dist
 /coverage
 
 *.log

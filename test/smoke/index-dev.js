@@ -10,7 +10,7 @@ const mocha = new Mocha({
 process.chdir(path.join(__dirname, "./template"));
 
 rimraf("./dist", () => {
-  const { WebpackDev } = require("../../index");
+  const { WebpackDev } = require("../../index")();
 
   webpack(WebpackDev, (err, stats) => {
     if (err) {
