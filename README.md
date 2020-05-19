@@ -105,12 +105,11 @@
    ```json
    {
      "presets": [
-       "@babel/preset-env",
-       "@babel/preset-react" // react项目中需要引入
+       "@babel/preset-env"
      ]
    }
    
-   // 其余的babel配置，按需引入。同时不要忘了安装对应的依赖哦。
+   // 在type为react或者未配置时需要加上@babel/preset-react。其它的babel配置，按需引入。同时不要忘了安装对应的依赖哦。
    ```
 
 6. 创建完成。现在就可以通过yarn dev或者yarn build来体验了。
