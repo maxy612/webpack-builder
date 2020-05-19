@@ -3,6 +3,17 @@
   "version": "1.1.2",
   "main": "index.js",
   "license": "MIT",
+  "keywords": ["webpack", "vue-cli", "create-react-app"],
+  "homepage": "https://github.com/maxy612/webpack-builder",
+  "author": {
+    "name": "maxy612",
+    "email": "630259701@qq.com",
+    "url": "https://maxy612.cn"
+  },
+  "bugs": {
+    "email": "630259701@qq.com",
+    "url": "https://github.com/maxy612/webpack-builder/issues"
+  },
   "dependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
