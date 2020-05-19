@@ -1,9 +1,13 @@
 {
   "name": "maxy-webpack-lib",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "main": "index.js",
   "license": "MIT",
-  "keywords": ["webpack", "vue-cli", "create-react-app"],
+  "keywords": [
+    "webpack",
+    "vue-cli",
+    "create-react-app"
+  ],
   "homepage": "https://github.com/maxy612/webpack-builder",
   "author": {
     "name": "maxy612",
