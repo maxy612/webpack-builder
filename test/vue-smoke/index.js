@@ -10,7 +10,29 @@ const mocha = new Mocha({
 process.chdir(path.join(__dirname, "./template"));
 
 rimraf("./dist", () => {
-  const { WebpackProd } = require("../../index")({ type: 'vue' });
+  const { WebpackProd } = require("../../index")({
+    type: "vue",
+    useLibCdn: true,
+    libCdn: {
+      js: [
+        {
+          path:
+            "https://cdnjs.cloudflare.com/ajax/libs/vuex/4.0.0-beta.2/vuex.global.prod.min.js",
+          external: {
+            variableName: "Vuex",
+            packageName: "vuex",
+          },
+        },
+      ],
+      css: [
+        {
+          path:
+            "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css",
+          append: false
+        },
+      ],
+    },
+  });
 
   webpack(WebpackProd, (err, stats) => {
     if (err) {

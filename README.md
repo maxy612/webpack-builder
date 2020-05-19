@@ -1,71 +1,116 @@
-### webpack打包脚手架(可自主决定该项目是React项目还是Vue项目)
+### Webpack项目开发脚手架(Vue或React可选)
+
+#### 简介
+
+该项目是一个即开即用的Webpack项目开发脚手架，支持Vue和React项目。用户通过安装maxy-webpack-lib包，按照一定的目录结构来构建项目，即可快速搭建项目，投入到开发工作中。类似于vue-cli或create-react-app，用户可以自由选择选择哪种框架来开发项目。
+
+----------------------------
+
+#### 目标
+
+1. 快速初始化项目，减少开发前的准备工作。
+2. 支持Vue和React项目自由选择。
+3. 支持自定义传入Webpack配置。
+
+----------------------
 
 #### 用法
+
 1. 安装
-```shell
-yarn add maxy-webpack-lib -D // 或者 npm install maxy-webpack-lib --save-dev
-```
 
-2. 在项目根目录下建立webpack.prod.js和webpack.dev.js, 在文件中导入默认配置
-```javascript
-// webpack.prod.js
-const { WebpackDev } = require('maxy-webpack-lib');
+   ```shell
+   ## 前置依赖 webpack-dev-server。确认当前项目安装了此依赖，如果没有，请运行:
+   yarn add webpack-dev-server -D 
+   ## 或者
+   npm i webpack-dev-server -D
+   
+   yarn add maxy-webpack-lib -D 
+   ## 或者
+   npm i maxy-webpack-lib --save-dev
+   ```
 
-/**
- * 项目业务打包配置项
- * @params type {string} 项目类型 可选值：[vue, react]
- * @params mobile {object} 是否是开发h5页面
- * ** @params remUnit {number} 1rem等于多少px
- * ** @params remPrecision {number} 计算出rem保留几位小数
- **/
-const configOptions = {}; 
+   
 
-/**
- * 用户自定义webpack配置
- * @params mode {string} 当前开发模式 development/production
- * @params config {object} 业务打包配置项，同configOptions
- **/
-const webpackConfigFn = ({ mode, config }) => {
-  return {
-    plugins: [],
-    module: {
-      rules: []
-    }
-  };
-}
+2. 创建如下的项目结构：
 
-module.exports = WebpackDev(configOptions, webpackConfigFn);
+   ```javascript
+   // | build
+   // 	--- index.js 构建配置入口
+   //	---	dev.js
+   //	---	prod.js
+   // | src
+   //  --- pages
+   //  ------ index
+   //  --------- index.html
+   //  --------- index.less (可选)
+   //  --------- index.js
+   // | .babelrc react项目中需要额外引入 @babel/preset-react, 其余情况下要有@babel/preset-env
+   // | package.json
+   ```
 
-// webpack.prod.js
-const { WebpackProd } = require('maxy-webpack-lib');
-module.exports = WebpackProd(configOptions, webpackConfigFn);
-```
+   
 
-3. 在项目根目录下放置 .babelrc, 内容为
-```json
-{
-  "presets": [
-    "@babel/preset-env",
-    "@babel/preset-react"
-  ]
-}
-```
+3. 引入项目
 
-4. 在package.json下scripts增加build 和 dev两个命令.
-```json
-{
-  "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "dev": "webpack-dev-server --config webpack.dev.js"
-  }
-}
-```
+   ```javascript
+   // build/index.js
+   const WebpackConfig = require('maxy-webpack-lib');
+   const config = {
+     type: 'react', // 或者vue，默认为react 标识项目是用react还是vue
+     useLibCdn: true, // 或false, 默认为true 项目中依赖库是否引用默认的cdn资源。在项目打包时，会自动将vue或者react及react-dom这样的核心库替换成cdn资源，如果不需要，可将此项置为false
+     mobile: false || {
+       remUnit: 75, // 由开发者根据设计稿和项目来定。表示html中1rem代表多少像素
+       remPrecision: 6 // 在px转rem过程中保留几位小数
+     }, // 配置移动端项目px转rem。如果不是移动端项目或者有自己的移动端配置，可将此项置为false。配置此项后，在项目中出现的px会按照配置转换成rem
+     
+     libCdnConfig: {
+       js: [], // 参照 html-webpack-tag-plugin中scripts配置(https://www.npmjs.com/package/html-webpack-tags-plugin)
+       css: [], // 参照 html-webpack-tag-plugin中links配置(https://www.npmjs.com/package/html-webpack-tags-plugin)
+     } // 配置额外的cdn资源。在打包时引用到的资源不会被打包进代码中，而是采用线上cdn资源。
+   }
+   
+   module.exports = WebpackConfig(config, (mode, curConfig) => {
+     // mode: development 或 production，代表当前是开发模式还是生产模式
+     // config: 当前配置信息
+     // return object; 返回的是webpack的配置信息，该返回会通过webpack-merge合并到现有配置中，用于用户自定义一些webpack配置。
+     return {
+       plugins: [],
+       resolve: {}
+     }
+   })
+   
+   // build/dev.js
+   const { WebpackDev } = require('./index');
+   module.exports = WebpackDev;
+   
+   // build/prod.js
+   const { WebpackProd } = require('./index');
+   module.exports = WebpackProd;
+   ```
 
-#### 项目目录结构默认为多页应用结构
-|-- src
-|------ pages/
-|---------- home/
-|-------------- index.js 项目入口，必须有
-|-------------- index.html 项目模板，必须有
+4. 在package.json中添加scripts开发和打包命令
 
-> 项目中的react, vue等在打包时会配置为cdn地址，一般无需手动处理。
+   ```json
+   // package.json
+   {
+   	"scripts": {
+       "dev": "webpack-dev-server --config ./build/dev.js",
+       "build": "webpack --config ./build/prod.js"
+     } 
+   }
+   ```
+
+5. 在.babrlrc中引入babel的插件
+
+   ```json
+   {
+     "presets": [
+       "@babel/preset-env",
+       "@babel/preset-react" // react项目中需要引入
+     ]
+   }
+   
+   // 其余的babel配置，按需引入。同时不要忘了安装对应的依赖哦。
+   ```
+
+6. 创建完成。现在就可以通过yarn dev或者yarn build来体验了。
