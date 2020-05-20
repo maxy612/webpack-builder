@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import App from './App';
 import logo from "../../assets/bg-main.png";
 import img from "../../assets/tax-all.png";
 
